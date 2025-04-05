@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import axios from 'axios';
 import '../NetflixContent.css';
 import { contentGenres } from './contentGenres';
-import { seriesGenres } from './seriesGenres';
 import ShareMenu from './ShareMenu';
 
 // Carga diferida de componentes
@@ -52,58 +51,47 @@ function NetflixContent() {
     setRandomTitle(titleList[randomIndex]);
   }, [randomContent]);
 
-   useEffect(() => {
+  // Obtener contenido de la API
+  useEffect(() => {
     const fetchNetflixContent = async () => {
       try {
         setLoading(true);
         
-        const params = {
-          api_key: process.env.REACT_APP_TMDB_API_KEY,
-          with_watch_providers: 8,
-          watch_region: 'AR',
-          language: 'es-AR',
-          ...(selectedGenre !== 'all' && { with_genres: selectedGenre })
+        const fetchContentByPage = async (type, maxPages = 10) => {
+          let allPageContent = [];
+          for (let page = 1; page <= maxPages; page++) {
+            const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}`, {
+              params: {
+                api_key: process.env.REACT_APP_TMDB_API_KEY,
+                with_watch_providers: 8,
+                watch_region: 'AR',
+                language: 'es-AR',
+                page: page
+              }
+            });
+            allPageContent = [...allPageContent, ...response.data.results];
+          }
+          return allPageContent;
         };
-  
-        const [movieResponse, tvResponse] = await Promise.all([
-          contentType !== 'tv' ? axios.get('https://api.themoviedb.org/3/discover/movie', { params }) : Promise.resolve({ data: { results: [] } }),
-          contentType !== 'movie' ? axios.get('https://api.themoviedb.org/3/discover/tv', { params }) : Promise.resolve({ data: { results: [] } })
+
+        const [movieContent, tvContent] = await Promise.all([
+          contentType === 'all' || contentType === 'movie' ? fetchContentByPage('movie') : Promise.resolve([]),
+          contentType === 'all' || contentType === 'tv' ? fetchContentByPage('tv') : Promise.resolve([])
         ]);
-  
-        const combined = [...movieResponse.data.results, ...tvResponse.data.results];
-        setAllContent(combined);
-        setRandomContent(combined[Math.floor(Math.random() * combined.length)]);
-  
+
+        const combinedContent = [...movieContent, ...tvContent];
+        setAllContent(combinedContent);
+        setRandomContent(combinedContent[Math.floor(Math.random() * combinedContent.length)]);
+        setLoading(false);
       } catch (err) {
         setError('Error al cargar contenido');
-        console.error("Error en API:", err);
-      } finally {
         setLoading(false);
+        console.error(err);
       }
     };
-  
+
     fetchNetflixContent();
   }, [contentType, selectedGenre]);
-
-// Carga los filtros activos desde localStorage al montar el componente
-useEffect(() => {
-  const savedContentType = localStorage.getItem('contentType');
-  const savedGenre = localStorage.getItem('selectedGenre');
-
-  if (savedContentType && savedContentType !== 'null') {
-    setActiveFilters(prev => [
-      ...prev.filter(f => f.type !== 'contentType'),
-      { type: 'contentType', value: savedContentType }
-    ]);
-  }
-
-  if (savedGenre && savedGenre !== 'null' && savedGenre !== 'all') {
-    setActiveFilters(prev => [
-      ...prev.filter(f => f.type !== 'genre'),
-      { type: 'genre', value: savedGenre }
-    ]);
-  }
-}, []); // <- Array vacío para que solo se ejecute al montar
 
   // Manejar filtros
   const handleFilters = (type, value) => {
@@ -161,27 +149,26 @@ useEffect(() => {
       <h2>{randomTitle}</h2>
 
       <div className="content-card">
+        {/* Filtros */}
         <Suspense fallback={<div>Cargando filtros...</div>}>
-         {/* <FilterButton
+          <FilterButton
             activeFilters={activeFilters}
             contentGenres={contentGenres}
             onRemoveFilter={removeFilter}
             onToggleFilters={() => setShowFilters(!showFilters)}
             showFilters={showFilters}
-          /> */}
+          />
 
-<FilterButton
-  activeFilters={activeFilters}
-  contentGenres={[...contentGenres, ...seriesGenres]} // Pasa todos los géneros
-  onRemoveFilter={removeFilter}
-  onToggleFilters={() => setShowFilters(!showFilters)}
-  showFilters={showFilters}
-/>
-
-          <FilterDropdown            
+          <FilterDropdown
             contentType={contentType}
             selectedGenre={selectedGenre}
-            genres={contentGenres} // Envía todos los géneros directamente
+            genres={
+              contentType === 'movie' 
+                ? contentGenres.filter(g => g.type === 'movie' || g.type === 'both')
+                : contentType === 'tv' 
+                  ? contentGenres.filter(g => g.type === 'tv' || g.type === 'both')
+                  : contentGenres
+            }
             onContentTypeChange={(value) => handleFilters('contentType', value)}
             onGenreChange={(value) => handleFilters('genre', value)}
             showFilters={showFilters}
