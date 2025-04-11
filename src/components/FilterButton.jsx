@@ -18,12 +18,15 @@ const FilterButton = ({
           ) : (
             <span>{contentGenres.find(g => g.id == filter.value)?.name}</span>
           )}
+          
           <button 
             className="remove-filter-btn"
             onClick={() => onRemoveFilter(index)}
           >
             ×
           </button>
+
+          
         </div>
       ))}
     </div>

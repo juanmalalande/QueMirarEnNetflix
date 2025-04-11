@@ -1,0 +1,40 @@
+.legal-footer {
+    background-color: #181818;
+    color: #aaa;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 40px;
+    border-top: 1px solid #333;
+  }
+  
+  .footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .tmdb-attribution {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .tmdb-attribution img{
+    width: 50px;
+  }
+  
+  .legal-links {
+    margin-top: 15px;
+  }
+  
+  .legal-links a {
+    color: #E50914;
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  
+  .legal-links a:hover {
+    text-decoration: underline;
+  }

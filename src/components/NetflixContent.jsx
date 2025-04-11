@@ -5,10 +5,11 @@ import { contentGenres } from './contentGenres';
 import { seriesGenres } from './seriesGenres';
 import ShareMenu from './ShareMenu';
 
+
 // Carga diferida de componentes
 const FilterButton = lazy(() => import('./FilterButton'));
 const FilterDropdown = lazy(() => import('./FilterDropdown'));
-const ContentCard = lazy(() => import('./ContentCard'));
+//const ContentCard = lazy(() => import('./ContentCard'));
 const ContentActions = lazy(() => import('./ContentActions'));
 
 function NetflixContent() {
@@ -23,6 +24,7 @@ function NetflixContent() {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [shouldResetFilters, setShouldResetFilters] = useState(false);
 
   // Estados de filtros
   const [contentType, setContentType] = useState(() => 
@@ -51,6 +53,20 @@ function NetflixContent() {
     const randomIndex = Math.floor(Math.random() * titleList.length);
     setRandomTitle(titleList[randomIndex]);
   }, [randomContent]);
+
+  useEffect(() => {
+    if (shouldResetFilters) {
+      const timer = setTimeout(() => {
+        setContentType('all');
+        setSelectedGenre('all');
+        setActiveFilters([]);
+        setRandomContent(allContent[Math.floor(Math.random() * allContent.length)]);
+        setShouldResetFilters(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [shouldResetFilters, allContent]);
 
    useEffect(() => {
     const fetchNetflixContent = async () => {
@@ -154,7 +170,17 @@ useEffect(() => {
 
   if (loading) return <div className="loading">Cargando recomendaciones...</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!randomContent) return <div className="error">No hay contenido disponible</div>;
+   if (!randomContent || shouldResetFilters) {
+    if (!shouldResetFilters) {
+      setShouldResetFilters(true); // Activa el reset
+    }
+    return (
+      <div className="error">
+        <p>No hay contenido con esos filtros. Reiniciando...</p>
+      </div>
+    );
+  }
+  
 
   return (
     <div className="netflix-content-container">
@@ -162,21 +188,14 @@ useEffect(() => {
 
       <div className="content-card">
         <Suspense fallback={<div>Cargando filtros...</div>}>
-         {/* <FilterButton
-            activeFilters={activeFilters}
-            contentGenres={contentGenres}
-            onRemoveFilter={removeFilter}
-            onToggleFilters={() => setShowFilters(!showFilters)}
-            showFilters={showFilters}
-          /> */}
+        <FilterButton
+          activeFilters={activeFilters}
+          contentGenres={[...contentGenres, ...seriesGenres]} // Pasa todos los géneros
+          onRemoveFilter={removeFilter}
+          onToggleFilters={() => setShowFilters(!showFilters)}
+          showFilters={showFilters}
+        />
 
-<FilterButton
-  activeFilters={activeFilters}
-  contentGenres={[...contentGenres, ...seriesGenres]} // Pasa todos los géneros
-  onRemoveFilter={removeFilter}
-  onToggleFilters={() => setShowFilters(!showFilters)}
-  showFilters={showFilters}
-/>
 
           <FilterDropdown            
             contentType={contentType}
@@ -248,6 +267,8 @@ useEffect(() => {
         />
       )}
     </div>
+
+   
   );
 }
 
