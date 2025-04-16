@@ -9,7 +9,7 @@ import ShareMenu from './ShareMenu';
 // Carga diferida de componentes
 const FilterButton = lazy(() => import('./FilterButton'));
 const FilterDropdown = lazy(() => import('./FilterDropdown'));
-//const ContentCard = lazy(() => import('./ContentCard'));
+const ContentCard = lazy(() => import('./ContentCard'));
 const ContentActions = lazy(() => import('./ContentActions'));
 
 function NetflixContent() {
@@ -121,6 +121,31 @@ useEffect(() => {
   }
 }, []); // <- Array vacío para que solo se ejecute al montar
 
+// Agrega este efecto adicional
+useEffect(() => {
+  const fetchContentDetails = async () => {
+    if (!randomContent) return;
+    
+    try {
+      const type = randomContent.media_type || (randomContent.title ? 'movie' : 'tv');
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/${type}/${randomContent.id}`,
+        {
+          params: {
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
+            language: 'es-AR'
+          }
+        }
+      );
+      setRandomContent(prev => ({ ...prev, ...response.data }));
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    }
+  };
+
+  fetchContentDetails();
+}, [randomContent?.id]); // Se ejecuta cuando cambia el ID del contenido
+
   // Manejar filtros
   const handleFilters = (type, value) => {
     if (type === 'contentType') {
@@ -215,48 +240,25 @@ useEffect(() => {
           />
         )}
 
-        {/* Contenido principal */}
-        <Suspense fallback={<div>Cargando contenido...</div>}>
-          <div className="content-wrapper">
-            <div className="content-image">
-              <img 
-                src={`https://image.tmdb.org/t/p/w500${randomContent.poster_path}`} 
-                alt={randomContent.title || randomContent.name} 
-                onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/300x450?text=Imagen+no+disponible';
-                  e.target.alt = 'Imagen no disponible';
-                }}
-              />
-            </div>
 
-            <div className="content-details">
-              <h2 className="content-title">{randomContent.title || randomContent.name}</h2>
-              
-              <div className="description-container">
-                <p className={`content-description ${showFullDescription ? 'expanded' : ''}`}>
-                  {randomContent.overview || 'Descripción no disponible.'}
-                </p>
-                {randomContent.overview?.length > 200 && (
-                  <button
-                    className="see-description-btn"
-                    onClick={() => setShowFullDescription(!showFullDescription)}
-                  >
-                    {showFullDescription ? 'Mostrar menos ▲' : 'Mostrar más ▼'}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+<Suspense fallback={<div>Cargando contenido...</div>}>
+  <ContentCard 
+    content={randomContent}
+    showFullDescription={showFullDescription}
+    onToggleDescription={() => setShowFullDescription(!showFullDescription)}
+    genres={contentType === 'movie' ? contentGenres : seriesGenres}
+  />
 
-          {/* Botones de acción */}
-          <div className="content-actions-container">
-            <ContentActions
-              onShare={handleShare}
-              onNetflix={handleOpenNetflix}
-              onRandomize={handleRandomize}
-            />
-          </div>
-        </Suspense>
+  {/* Botones de acción */}
+  <div className="content-actions-container">
+    <ContentActions
+      onShare={handleShare}
+      onNetflix={handleOpenNetflix}
+      onRandomize={handleRandomize}
+    />
+  </div>
+</Suspense>
+
       </div>
 
       {/* Menú de compartir */}
