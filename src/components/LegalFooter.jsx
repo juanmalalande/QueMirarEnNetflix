@@ -16,15 +16,15 @@ function LegalFooter() {
             />
           </a>
         </div>
-       {/*} <p>
+        <p>
           © {new Date().getFullYear()} Recomendaciones de contenido en streaming. 
-        </p>*/}
+        </p>
         <p>
         Este sitio no está afiliado a Netflix ni a ninguna otra plataforma mencionada.
         </p>
         <div className="legal-links">
           <LegalModal type="privacy" />
-          {/*<LegalModal type="terms" />*/}
+          {/* acá iría LegalModal type="terms" si es necesario tener TyC*/}
         </div>
       </div>
     </footer>
