@@ -1,40 +1,58 @@
 .legal-footer {
-    background-color: #181818;
-    color: #aaa;
-    padding: 20px;
-    text-align: center;
-    font-size: 0.8rem;
-    margin-top: 40px;
-    border-top: 1px solid #333;
-  }
-  
-  .footer-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .tmdb-attribution {
-    margin: 15px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
+  padding: 15px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #ffffff;
+  border-top: 1px solid #ffffff;
+  margin-top: 14px;
+  /* background: #333; */
+  /* border-radius: 15px; */
+  /* overflow: hidden; */
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+}
 
-  .tmdb-attribution img{
-    width: 50px;
-  }
-  
-  .legal-links {
-    margin-top: 15px;
-  }
-  
-  .legal-links a {
-    color: #E50914;
-    margin: 0 10px;
-    text-decoration: none;
-  }
-  
-  .legal-links a:hover {
-    text-decoration: underline;
-  }
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.tmdb-attribution {
+  margin: 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tmdb-attribution p {
+  margin-bottom: 8px;
+}
+
+.legal-links {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.legal-link {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.legal-link:hover {
+  color: #ffffff;
+}
+
+button.legal-link{
+    color: #e50914;
+}
+
+.img {
+  width: 50px;
+}

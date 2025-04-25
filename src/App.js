@@ -5,7 +5,7 @@ import LegalFooter from './components/LegalFooter';
 function App() {  
   return (
     <div className="app-container">
-      <h1>¿Qué mirar en Netflix?</h1>
+      <h1>¿Qué mirar en Netflix hoy?</h1>
       <NetflixContent />
       <LegalFooter />
     </div>
