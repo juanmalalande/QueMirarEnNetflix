@@ -24,7 +24,7 @@ function LegalFooter() {
         </p>
         <div className="legal-links">
           <LegalModal type="privacy" />
-          {/* acá iría LegalModal type="terms" si es necesario tener TyC*/}
+          <LegalModal type="terms" /> 
         </div>
       </div>
     </footer>
