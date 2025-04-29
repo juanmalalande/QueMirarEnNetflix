@@ -1,4 +1,3 @@
-/* ESTILOS BASE */
 .netflix-content-container {
   display: flex;
   flex-direction: column;
@@ -7,7 +6,6 @@
   max-width: 800px;
 }
 
-/* TARJETA PRINCIPAL */
 .content-card {
   position: relative;
   width: 100%;
@@ -16,11 +14,10 @@
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: column; /* Cambiado a columna para móvil */
-  padding-top: 60px; /* Espacio para filtros */
+  flex-direction: column;
+  padding-top: 60px;
 }
 
-/* CONTENIDO */
 .content-wrapper {
   display: flex;
   padding: 5px;
@@ -83,7 +80,6 @@
   text-align: left;
 }
 
-/* BOTONES PRINCIPALES */
 .content-actions-container {
   background: #333;
   padding: 5px 20px;
@@ -98,7 +94,7 @@
 
 button {
   border: none;
-  border-radius: 4px !important; /* Fuerza bordes rectos */
+  border-radius: 4px !important;
   cursor: pointer;
   padding: 10px 15px;
   font-weight: bold;
@@ -122,7 +118,6 @@ button {
   color: white;
 }
 
-/* FILTROS */
 .filter-header {
   position: absolute;
   top: 15px;

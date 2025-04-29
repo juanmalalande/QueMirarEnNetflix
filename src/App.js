@@ -6,9 +6,10 @@ function App() {
   return (
     <div className="app-container">
       <h1>¿Qué mirar en Netflix hoy?</h1>
-      <NetflixContent />
+      <NetflixContent />    
       <LegalFooter />
     </div>
+    
   );
 
 }

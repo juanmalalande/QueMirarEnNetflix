@@ -5,7 +5,7 @@ import { seriesGenres } from './seriesGenres';
 const FilterDropdown = ({ 
   contentType,
   selectedGenre,
-  genres, // Géneros de películas
+  genres,
   onContentTypeChange,
   onGenreChange,
   showFilters
@@ -25,7 +25,6 @@ const FilterDropdown = ({
         </select>
       </div>
 
-      {/* Géneros para Películas */}
       {contentType === 'movie' && (
         <div className="filter-group">
           <label>Género de Películas:</label>
@@ -44,7 +43,6 @@ const FilterDropdown = ({
         </div>
       )}
 
-      {/* Géneros para Series */}
       {contentType === 'tv' && (
         <div className="filter-group">
           <label>Género de Series:</label>

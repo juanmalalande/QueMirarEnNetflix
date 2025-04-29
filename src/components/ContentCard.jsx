@@ -1,45 +1,8 @@
-/*import React from 'react';
-import '../NetflixContent.css';
-
-const ContentCard = ({ content, showFullDescription, onToggleDescription }) => (
-  <>
-    <div className="content-image">
-      <img 
-        src={`https://image.tmdb.org/t/p/w500${content.poster_path}`} 
-        alt={content.title || content.name}
-        onError={(e) => {
-          e.target.src = 'https://via.placeholder.com/300x450?text=Imagen+no+disponible';
-          e.target.alt = 'Imagen no disponible';
-        }}
-      />
-    </div>
-    <div className="content-details">
-      <h2 className="content-title">{content.title || content.name}</h2>
-      <h3>{content.runtime}</h3>
-      <div className="description-container">
-        <p className={`content-description ${showFullDescription ? 'expanded' : ''}`}>
-          {content.overview || 'Descripción no disponible.'}
-        </p>
-        {content.overview?.length > 200 && (
-          <button
-            className="see-description-btn"
-            onClick={onToggleDescription}
-          >
-            {showFullDescription ? 'Mostrar menos ▲' : 'Mostrar más ▼'}
-          </button>
-        )}
-      </div>
-    </div>
-  </>
-);
-
-export default ContentCard;*/
-
 import React from 'react';
 import '../NetflixContent.css';
 
 const ContentCard = ({ content, showFullDescription, onToggleDescription, genres }) => {
-  // Función para formatear la duración
+
   const formatDuration = (minutes) => {
     if (!minutes) return null;
     const hours = Math.floor(minutes / 60);
@@ -47,7 +10,7 @@ const ContentCard = ({ content, showFullDescription, onToggleDescription, genres
     return `${hours > 0 ? `${hours}h ` : ''}${mins > 0 ? `${mins}m` : ''}`.trim();
   };
 
-  // Función para formatear temporadas
+
   const formatSeasons = (seasons) => {
     if (!seasons) return null;
     return `${seasons} temporada${seasons > 1 ? 's' : ''}`;
@@ -70,17 +33,17 @@ const ContentCard = ({ content, showFullDescription, onToggleDescription, genres
         <h2 className="content-title">{content.title || content.name}</h2>
         
         <div className="content-metadata">
-          {/* Duración para películas */}
+          
           {content.runtime && content.runtime > 0 && (
             <span>{formatDuration(content.runtime)}</span>
           )}
           
-          {/* Temporadas para series */}
+        
           {content.number_of_seasons && content.number_of_seasons > 0 && (
             <span>{formatSeasons(content.number_of_seasons)}</span>
           )}
           
-          {/* Géneros */}
+          
           {content.genre_ids && content.genre_ids.length > 0 && (
             <span>
               {content.genre_ids

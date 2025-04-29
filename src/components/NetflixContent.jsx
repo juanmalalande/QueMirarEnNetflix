@@ -6,27 +6,24 @@ import { seriesGenres } from './seriesGenres';
 import ShareMenu from './ShareMenu';
 
 
-// Carga diferida de componentes
 const FilterButton = lazy(() => import('./FilterButton'));
 const FilterDropdown = lazy(() => import('./FilterDropdown'));
 const ContentCard = lazy(() => import('./ContentCard'));
 const ContentActions = lazy(() => import('./ContentActions'));
 
 function NetflixContent() {
-  // Estados principales
+ 
   const [randomContent, setRandomContent] = useState(null);
   const [allContent, setAllContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [randomTitle, setRandomTitle] = useState('');
 
-  // Estados de UI
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [shouldResetFilters, setShouldResetFilters] = useState(false);
 
-  // Estados de filtros
   const [contentType, setContentType] = useState(() => 
     localStorage.getItem('contentType') || 'all'
   );
@@ -35,7 +32,6 @@ function NetflixContent() {
   );
   const [activeFilters, setActiveFilters] = useState([]);
 
-  // Lista de títulos aleatorios
   const titleList = [
     'Hoy te recomiendo:',
     'Prendé Netflix y disfrutá de:',
@@ -48,7 +44,7 @@ function NetflixContent() {
     'Perfecto para hoy:'
   ];
 
-  // Efecto para título aleatorio
+  
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * titleList.length);
     setRandomTitle(titleList[randomIndex]);
@@ -101,7 +97,7 @@ function NetflixContent() {
     fetchNetflixContent();
   }, [contentType, selectedGenre]);
 
-// Carga los filtros activos desde localStorage al montar el componente
+
 useEffect(() => {
   const savedContentType = localStorage.getItem('contentType');
   const savedGenre = localStorage.getItem('selectedGenre');
@@ -119,9 +115,8 @@ useEffect(() => {
       { type: 'genre', value: savedGenre }
     ]);
   }
-}, []); // <- Array vacío para que solo se ejecute al montar
+}, []);
 
-// Agrega este efecto adicional
 useEffect(() => {
   const fetchContentDetails = async () => {
     if (!randomContent) return;
@@ -144,9 +139,8 @@ useEffect(() => {
   };
 
   fetchContentDetails();
-}, [randomContent?.id]); // Se ejecuta cuando cambia el ID del contenido
+}, [randomContent?.id]); 
 
-  // Manejar filtros
   const handleFilters = (type, value) => {
     if (type === 'contentType') {
       setContentType(value);
@@ -163,7 +157,7 @@ useEffect(() => {
     ]);
   };
 
-  // Eliminar filtro
+ 
   const removeFilter = (index) => {
     const filter = activeFilters[index];
     if (filter.type === 'contentType') setContentType('all');
@@ -171,7 +165,7 @@ useEffect(() => {
     setActiveFilters(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Acciones
+
   const handleRandomize = () => {
     setRandomContent(allContent[Math.floor(Math.random() * allContent.length)]);
   };
@@ -197,7 +191,7 @@ useEffect(() => {
   if (error) return <div className="error">{error}</div>;
    if (!randomContent || shouldResetFilters) {
     if (!shouldResetFilters) {
-      setShouldResetFilters(true); // Activa el reset
+      setShouldResetFilters(true); 
     }
     return (
       <div className="error">
@@ -215,7 +209,7 @@ useEffect(() => {
         <Suspense fallback={<div>Cargando filtros...</div>}>
         <FilterButton
           activeFilters={activeFilters}
-          contentGenres={[...contentGenres, ...seriesGenres]} // Pasa todos los géneros
+          contentGenres={[...contentGenres, ...seriesGenres]}
           onRemoveFilter={removeFilter}
           onToggleFilters={() => setShowFilters(!showFilters)}
           showFilters={showFilters}
@@ -225,14 +219,13 @@ useEffect(() => {
           <FilterDropdown            
             contentType={contentType}
             selectedGenre={selectedGenre}
-            genres={contentGenres} // Envía todos los géneros directamente
+            genres={contentGenres} 
             onContentTypeChange={(value) => handleFilters('contentType', value)}
             onGenreChange={(value) => handleFilters('genre', value)}
             showFilters={showFilters}
           />
         </Suspense>
 
-        {/* Overlay para cerrar filtros */}
         {showFilters && (
           <div 
             className="filter-overlay" 
@@ -249,7 +242,6 @@ useEffect(() => {
     genres={contentType === 'movie' ? contentGenres : seriesGenres}
   />
 
-  {/* Botones de acción */}
   <div className="content-actions-container">
     <ContentActions
       onShare={handleShare}
@@ -261,7 +253,6 @@ useEffect(() => {
 
       </div>
 
-      {/* Menú de compartir */}
       {showShareMenu && (
         <ShareMenu 
           content={randomContent} 
