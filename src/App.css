@@ -37,3 +37,54 @@ h1 {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
+
+h5{
+  font-size: 9px;
+  align-self: flex-end;
+  font-weight: normal;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.desktop-ads {
+  width: 300px;
+  display: none;
+}
+
+.mobile-ads {
+  display: none;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.ad-unit {
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .desktop-ads {
+    display: block; /* Mostrar en desktop */
+  }
+}
+
+@media (max-width: 767px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  
+  .mobile-ads {
+    display: block; /* Mostrar en móvil */
+    order: 2; /* Colocar después del contenido */
+  }
+  
+  .desktop-ads {
+    display: none !important; /* Asegurar que no se muestre */
+  }
+}
