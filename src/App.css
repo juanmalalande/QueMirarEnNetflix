@@ -74,7 +74,7 @@ h5{
 
 @media (min-width: 768px) {
   .desktop-ads {
-    display: block; /* Mostrar en desktop */
+    display: block;
   }
 }
 
@@ -88,12 +88,12 @@ h5{
   }
   
   .mobile-ads {
-    display: block; /* Mostrar en móvil */
-    order: 2; /* Colocar después del contenido */
+    display: block; 
+    order: 2; 
   }
   
   .desktop-ads {
-    display: none !important; /* Asegurar que no se muestre */
+    display: none /* !important; Asegurar que no se muestre */
   }
 
   .empty {
