@@ -50,7 +50,7 @@ h5{
 }
 
 .desktop-ads {
-  width: 300px;
+  width: 15%;
   display: none;
 }
 
@@ -68,10 +68,18 @@ h5{
   margin-bottom: 20px;
 }
 
+.empty {
+  width: 15%;
+}
+
 @media (min-width: 768px) {
   .desktop-ads {
     display: block; /* Mostrar en desktop */
   }
+}
+
+.empty {
+  width: 0%;
 }
 
 @media (max-width: 767px) {
@@ -86,5 +94,9 @@ h5{
   
   .desktop-ads {
     display: none !important; /* Asegurar que no se muestre */
+  }
+
+  .empty {
+    width: 0%;
   }
 }

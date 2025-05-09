@@ -38,9 +38,13 @@ function App() {
       <h1>¿Qué mirar en Netflix hoy?</h1>
       
       <div className="content-wrapper">
+        
+        <div className='empty'></div>
+
         <main className="main-content">
           <NetflixContent />
         </main>
+
         
         <aside className="desktop-ads">
           <div className="ad-unit">
